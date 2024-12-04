@@ -1,0 +1,9 @@
+---
+title: "Reproducable Figures"
+format: 
+  html:
+    embed-resources: true
+editor: visual
+---
+
+## 
