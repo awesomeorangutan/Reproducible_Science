@@ -18,6 +18,16 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## QUESTION 01: Data Visualisation for Science Communication
 
+Loading libraries
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(janitor)
+library(ragg)
+library(here)
+library(svglite)
+```
+
 *Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data. **Do not make a boxplot**.*
 
 *Use the following references to guide you:*
