@@ -33,6 +33,15 @@ Loading and saving raw data set
 penguins_raw 
 write_csv(penguins_raw, here("data", "penguins_raw.csv"))
 ```
+
+loading functions
+
+#Function file
+```{r}
+source(here("functions", "Functions_For_Penguins.R"))
+```
+
+
 *Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data. **Do not make a boxplot**.*
 
 *Use the following references to guide you:*
