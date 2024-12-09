@@ -41,6 +41,26 @@ loading functions
 source(here("functions", "Functions_For_Penguins.R"))
 ```
 
+Cleaning the raw data and saving cleaned version 
+```{r}
+#clean data
+penguins_cleaned <- penguins_raw %>%
+  clean_column_names() %>%
+  remove_columns("comments") %>%
+  remove_columns("delta") %>%
+  remove_empty_columns_rows() %>%
+  shorten_species() %>%
+  shorten_sex ()
+
+#save and load clean data
+write_csv(penguins_cleaned, here("data", "penguins_clean.csv"))
+
+penguins_cleaned <- read_csv(here("data", "penguins_clean.csv"), show_col_types = FALSE)
+
+#visualise the cleaned data
+colnames(penguins_cleaned)
+penguins_cleaned
+```
 
 *Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data. **Do not make a boxplot**.*
 
