@@ -28,6 +28,11 @@ library(here)
 library(svglite)
 ```
 
+Loading and saving raw data set 
+```{r}
+penguins_raw 
+write_csv(penguins_raw, here("data", "penguins_raw.csv"))
+```
 *Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data. **Do not make a boxplot**.*
 
 *Use the following references to guide you:*
