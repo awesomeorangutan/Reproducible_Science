@@ -1,15 +1,20 @@
 ---
 title: "Reproducable Figures"
-format: 
-  html:
-    embed-resources: true
-editor: visual
+output:
+  pdf_document: default
+  html_document: default
+date: "2024-12-09"
 ---
 
-## 
+QUESTION 01: Data Visualisation for Science Communication
 
-# Introduction
-
+Loading libraries
 ```{r}
 library(tidyverse)
+library(palmerpenguins)
+library(janitor)
+library(ragg)
+library(here)
+library(svglite)
 ```
+
