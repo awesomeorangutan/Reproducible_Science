@@ -194,6 +194,7 @@ write_csv(penguins_raw, here("data", "penguins_raw.csv"))
 ```{r}
 source(here("functions", "Functions_For_Penguins.R"))
 source(here("functions", "Exploratory_Plotting.R"))
+source(here("functions", "Diagnostic_Plot_Function.R"))
 ```
 
 **Cleaning the raw data and saving as a new data files**
@@ -228,7 +229,7 @@ write_csv(adelie_flipper_length_and_sex, here("data", "adelie_flipper_length_and
 
 **Exploratory plot of raw data**
 
-```{r}
+```{r Data Exploration}
 # using exploratory plotting function generate violin plot
 plot_flipper_violin(adelie_flipper_length_and_sex)
 
@@ -259,39 +260,50 @@ approximately normally distributed, with a slight positive skew for the
 male flipper length data as the lower end of the violin is wider than
 the top end.
 
-*Results*
+**Defining the linear model**
 
--   *Discussion*
-
--   *Conclusion*
-
-*You will be marked on the following:*
-
-### a) Your code for readability and functionality
-
-### b) Your figures for communication
-
-### c) Your text communication of your analysis
-
-*Below is a template you can use.*
-
-------------------------------------------------------------------------
-
-### Introduction
-
-```{r Data Exploration}
-
-# Make sure your code prints. 
-
+```{r}
+linear_model <- lm(flipper_length_mm ~ sex, data = adelie_flipper_length_and_sex)
 ```
 
-### Hypothesis
+**Checking data meets assumptions of linear model analysis**
 
-### Statistical Methods
+Before conducting the linear model analysis we first verify that the
+data meets the assumptions of a linear model analysis. These are:
+independence of data points, normality, homoscedasticity, and absence of
+influential outliers. We can assume that the data collection and
+sampling methods used ensured independence of data points. To test for
+compliance with the remaining assumptions, diagnostic plots are used to
+examine the data.
 
-```{r Statistics}
+```{r Diagnostic Plots}
+#Diagnostic plots 
+#Displaying diagnostic plots in a multi-panel grid and adjusting margin size 
+par(mfrow = c(2, 2), 
+    mar = c(4, 4, 2, 2))  
 
-# Make sure your code prints. 
+
+#Diagnostic plot function
+Diagnostic_Plot_Function()
+
+
+# Saving the diagnostic plot as a .png
+save_diagnostic_plot_as_png(
+  here("figures", "Diagnostic_Plot.png"),  
+  Diagnostic_Plot_Function,                    
+  size = 20,                               
+  res = 300,                              
+  scaling = 2                              
+)
+
+# Saving the diagnostic plot as a .svg
+save_diagnostic_plot_as_svg(
+  here("figures", "Diagnostic_Plot.svg"),  
+  Diagnostic_Plot_Function,                    
+  size = 20,                               
+  scaling = 2                              
+)
+
 
 ```
 
