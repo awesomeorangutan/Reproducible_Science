@@ -168,6 +168,7 @@ write_csv(penguins_raw, here("data", "penguins_raw.csv"))
 source(here("functions", "Functions_For_Penguins.R"))
 source(here("functions", "Exploratory_Plotting.R"))
 source(here("functions", "Diagnostic_Plot_Function.R"))
+source(here("functions", "SaveAs_svg_png_Functions.R"))
 ```
 
 **Cleaning the raw data and saving as a new data files**
@@ -277,17 +278,17 @@ save_diagnostic_plot_as_svg(
   scaling = 2                              
 )
 
-
 ```
 
 The residuals versus fitted values and scale-location plot both show an
 approximately horizontal red line which suggests the data fits the
 assumption of homoscedasticity. The Q-Q residuals plot shows the points
-falling motly along the diagonal line with some deviation at the extreme
-ends which are not sufficient to violate the assumption of normality,
-therefore we may assume that the residuals are normally distributed.
-Finally, the residuals versus factor plot indicates no significant
-outliers, validating the assumption of absence of influential outliers.
+falling mostly along the diagonal line with some deviation at the
+extreme ends which are not sufficient to violate the assumption of
+normality, therefore we may assume that the residuals are normally
+distributed. Finally, the residuals versus factor plot indicates no
+significant outliers, validating the assumption of absence of
+influential outliers.
 
 ### Results & Discussion
 
@@ -300,8 +301,34 @@ summary(linear_model)
 
 **Plotted linear model**
 
-```{r}
+```{r Plot of Linear model}
+# Creating dataframe with the model confidence intervals 
+model_predictions <- adelie_flipper_length_and_sex %>%
+  mutate(
+    predicted = predict(linear_model, newdata = adelie_flipper_length_and_sex),
+    conf_low = predict(linear_model, newdata = adelie_flipper_length_and_sex, interval = "confidence")[,2],
+    conf_high = predict(linear_model, newdata = adelie_flipper_length_and_sex, interval = "confidence")[,3]
+  )
 
+# Plotting the model
+plot <- ggplot(model_predictions, aes(x = sex, y = flipper_length_mm)) + 
+  geom_point(aes(color = sex), size = 2, alpha = 0.6) + 
+  geom_errorbar(aes(ymin = conf_low, ymax = conf_high), width = 0.2) + 
+  stat_summary(aes(x = sex, y = flipper_length_mm), fun = mean, geom = "point", color = "black", size = 2) + 
+  labs(title = "Linear Model: Flipper Lengths in Male and Female Adelie Penguins", x = "Sex", y = "Flipper Length (mm)") +
+  theme_minimal() + 
+  theme(legend.position = "none") 
+
+```
+
+**Saving Plots as .svg & .png files**
+
+```{r Saving Plots}
+# Saving as PNG
+save_plot_as_png(plot, "figures/Linear_Model_Plot.png", size = 20, res = 300)
+
+# Saving as SVG
+save_plot_as_svg(plot, "figures/Linear_Model_Plot.svg", size = 20)
 ```
 
 **Results table**
