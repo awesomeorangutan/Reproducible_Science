@@ -74,6 +74,17 @@ penguins_cleaned
 ### a) Provide your figure here:
 
 ```{r bad figure code, echo=FALSE}
+# Saving dataset of species, flipper length & body mass columns and removing NA values
+species_flipper_length_and_bodymass <- penguins_cleaned %>% select(species, flipper_length_mm, body_mass_g) %>%
+  drop_na()
+
+# Visualising modified data set 
+species_flipper_length_and_bodymass
+
+# Saving modified data 
+write_csv(penguins_cleaned, here("data", "species_flipper_length_and_bodymass.csv"))
+```
+
 
 # There is no need to provide the code for your bad figure, just use echo=FALSE so the code is hidden. Make sure your figure is visible after you knit it. 
 
