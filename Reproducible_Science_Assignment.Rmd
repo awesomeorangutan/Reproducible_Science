@@ -193,6 +193,7 @@ Loading functions
 
 ```{r}
 source(here("functions", "Functions_For_Penguins.R"))
+source(here("functions", "Exploratory_Plotting.R"))
 ```
 
 Cleaning the raw data and saving as a new data file
@@ -216,6 +217,41 @@ penguins_cleaned <- read_csv(here("data", "penguins_clean.csv"), show_col_types 
 colnames(penguins_cleaned)
 penguins_cleaned
 ```
+
+```{r}
+# Saving dataset of Adelie penguins, flipper length & sex columns and removing NA values 
+adelie_flipper_length_and_sex <- penguins_cleaned %>%
+  select(species, flipper_length_mm, sex) %>%
+  filter(species == "Adelie") %>%
+  drop_na()
+
+write_csv(adelie_flipper_length_and_sex, here("data", "adelie_flipper_length_and_sex.csv"))
+```
+
+Exploratory plot of raw data
+```{r}
+# using exploratory plotting function generate violin plot
+plot_flipper_violin(adelie_flipper_length_and_sex)
+
+# Saving the plot as a PNG file in figures folder
+save_flipper_violin_png(
+  penguins_flippers = adelie_flipper_length_and_sex, 
+  filename = "Figures/adelie_flipper_violin_plot.png", 
+  size = 15,
+  res = 300,
+  scaling = 1
+)
+
+# Saving the plot as an SVG file in figures folder
+save_flipper_plot_svg(
+  penguins_flippers = adelie_flipper_length_and_sex,
+  filename = "Figures/adelie_flipper_violin_plot.svg", 
+  size = 15,
+  scaling = 1
+)
+
+```
+
 
 -   *Results*
 
