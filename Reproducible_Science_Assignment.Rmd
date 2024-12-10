@@ -4,21 +4,28 @@ output:
   html_document: default
   pdf_document: default
 date: "2024-12-09"
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*The following is a template .rmd RMarkdown file for you to use for your homework submission.*
+*The following is a template .rmd RMarkdown file for you to use for your
+homework submission.*
 
-*Please Knit your .rmd to a PDF format or HTML and submit that with no identifiers like your name.*
+*Please Knit your .rmd to a PDF format or HTML and submit that with no
+identifiers like your name.*
 
-*To create a PDF, first install tinytex and load the package. Then press the Knit arrow and select "Knit to PDF".*
+*To create a PDF, first install tinytex and load the package. Then press
+the Knit arrow and select "Knit to PDF".*
 
 ## QUESTION 01: Data Visualisation for Science Communication
 
 Loading libraries
+
 ```{r}
 library(tidyverse)
 library(palmerpenguins)
@@ -28,20 +35,21 @@ library(here)
 library(svglite)
 ```
 
-Loading and saving raw data set 
+Loading and saving raw data set
+
 ```{r}
 penguins_raw 
 write_csv(penguins_raw, here("data", "penguins_raw.csv"))
 ```
 
-loading functions
+Loading functions
 
-#Function file
 ```{r}
 source(here("functions", "Functions_For_Penguins.R"))
 ```
 
-Cleaning the raw data and saving cleaned version 
+Cleaning the raw data and saving as a new data file
+
 ```{r}
 #clean data
 penguins_cleaned <- penguins_raw %>%
@@ -62,59 +70,61 @@ colnames(penguins_cleaned)
 penguins_cleaned
 ```
 
-*Create a figure using the Palmer Penguin dataset that is correct but badly communicates the data. **Do not make a boxplot**.*
-
-*Use the following references to guide you:*
-
--   [*https://www.nature.com/articles/533452a*](https://www.nature.com/articles/533452a){.uri}
--   [*https://elifesciences.org/articles/16800*](https://elifesciences.org/articles/16800){.uri}
-
-*Note: Focus on visual elements rather than writing misleading text on it.*
-
-### a) Provide your figure here:
+Creating a figure using the Palmer Penguin data set that is correct but
+badly communicates the data
 
 ```{r bad figure code, echo=FALSE}
-# Saving dataset of species, flipper length & body mass columns and removing NA values
+# Saving dataset of species, flipper length & body mass columns and removing NA values 
 species_flipper_length_and_bodymass <- penguins_cleaned %>% select(species, flipper_length_mm, body_mass_g) %>%
   drop_na()
 
 # Visualising modified data set 
 species_flipper_length_and_bodymass
 
-# Saving modified data 
+# Saving modified data set to use in scatterplot
 write_csv(penguins_cleaned, here("data", "species_flipper_length_and_bodymass.csv"))
 ```
-```{r}
 
+### a) Figure:
 
-# Create a scatterplot that is poorly made
+```{r echo=FALSE}
+# Creating scatterplot
 ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
   geom_point(size = 10, alpha = 0.1) +  # Overly large points with excessive transparency
   labs(title = "Flipper Length vs Body Mass", 
        x = "Flipper Length (mm)", 
        y = "Body Mass (g)") +
   theme_minimal() +
-  theme(axis.text = element_text(size = 30, angle = 90, color = "blue"),
-        legend.position = "top") +  # Overly large axis text with awkward orientation
-  scale_color_manual(values = c("hotpink", "yellow", "limegreen")) +  # Clashing colors
-  coord_cartesian(xlim = c(150, 250), ylim = c(2000, 7000))  # Restricting data view unnecessarily
+  theme(axis.text = element_text(size = 3, angle = 90, color = "black"),
+        legend.position = "top") +  
+  scale_color_manual(values = c("hotpink", "yellow", "limegreen")) +  
+  coord_cartesian(xlim = c(150, 250), ylim = c(1000, 7000))
 
 ```
 
+### b) Explanation of poor design choices 
 
-# There is no need to provide the code for your bad figure, just use echo=FALSE so the code is hidden. Make sure your figure is visible after you knit it. 
-
-```
-
-### b) Write about how your design choices mislead the reader about the underlying data (200-300 words).
-
-*Include references.*
+This graph plots the body mass against flipper length for three penguin
+species. However, the design choices in this graph are misleading and
+poorly communicate the data. One reason for this is that the patterns in
+the data are are difficult to see due to the overly large points with
+excessive transparency that blend with one another, and are hard to see
+over clashing colours. For example pink and yellow points overlap so we
+cannot fully view the data for these two species. Additionally, the view
+of the data is restricted by the axis as these do not start at 0, so any
+potential outliers are not seen making the graph misleading. Finally,
+the graphical elements of this graph are unclear as the text on the axis
+is too small to read easily without zooming in, and the labels on the x
+axis are oriented at a 90 degree angle making it awkward to read
+(Whitlock and Schluter, 2019).
 
 ------------------------------------------------------------------------
 
 ## QUESTION 2: Data Pipeline
 
-*Write a data analysis pipeline in your .rmd RMarkdown file. You should be aiming to write a clear explanation of the steps, the figures visible, as well as clear code.*
+*Write a data analysis pipeline in your .rmd RMarkdown file. You should
+be aiming to write a clear explanation of the steps, the figures
+visible, as well as clear code.*
 
 *Your code should include the steps practiced in the lab session:*
 
@@ -132,7 +142,9 @@ ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_
 
 -   *Save the figure*
 
-*An exploratory figure shows raw data, such as the distribution of the data. A results figure demonstrates the stats method chosen, and includes the results of the stats test.*
+*An exploratory figure shows raw data, such as the distribution of the
+data. A results figure demonstrates the stats method chosen, and
+includes the results of the stats test.*
 
 *Between your code, communicate clearly what you are doing and why.*
 
@@ -196,7 +208,9 @@ ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_
 
 ### a) GitHub
 
-*Upload your RProject you created for **Question 2** and any files and subfolders used to GitHub. Do not include any identifiers such as your name. Make sure your GitHub repo is public.*
+*Upload your RProject you created for **Question 2** and any files and
+subfolders used to GitHub. Do not include any identifiers such as your
+name. Make sure your GitHub repo is public.*
 
 *GitHub link:*
 
@@ -206,17 +220,21 @@ ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_
 
 *Partner's GitHub link:*
 
-*You **must** provide this so I can verify there is no plagiarism between you and your partner.*
+*You **must** provide this so I can verify there is no plagiarism
+between you and your partner.*
 
 ### c) Reflect on your experience running their code. (300-500 words)
 
--   *What elements of your partner's code helped you to understand their data pipeline?*
+-   *What elements of your partner's code helped you to understand their
+    data pipeline?*
 
 -   *Did it run? Did you need to fix anything?*
 
--   *What suggestions would you make for improving their code to make it more understandable or reproducible, and why?*
+-   *What suggestions would you make for improving their code to make it
+    more understandable or reproducible, and why?*
 
--   *If you needed to alter your partner's figure using their code, do you think that would be easy or difficult, and why?*
+-   *If you needed to alter your partner's figure using their code, do
+    you think that would be easy or difficult, and why?*
 
 ### d) Reflect on your own code based on your experience with your partner's code and their review of yours. (300-500 words)
 
