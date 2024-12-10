@@ -84,6 +84,22 @@ species_flipper_length_and_bodymass
 # Saving modified data 
 write_csv(penguins_cleaned, here("data", "species_flipper_length_and_bodymass.csv"))
 ```
+```{r}
+
+
+# Create a scatterplot that is poorly made
+ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  geom_point(size = 10, alpha = 0.1) +  # Overly large points with excessive transparency
+  labs(title = "Flipper Length vs Body Mass", 
+       x = "Flipper Length (mm)", 
+       y = "Body Mass (g)") +
+  theme_minimal() +
+  theme(axis.text = element_text(size = 30, angle = 90, color = "blue"),
+        legend.position = "top") +  # Overly large axis text with awkward orientation
+  scale_color_manual(values = c("hotpink", "yellow", "limegreen")) +  # Clashing colors
+  coord_cartesian(xlim = c(150, 250), ylim = c(2000, 7000))  # Restricting data view unnecessarily
+
+```
 
 
 # There is no need to provide the code for your bad figure, just use echo=FALSE so the code is hidden. Make sure your figure is visible after you knit it. 
