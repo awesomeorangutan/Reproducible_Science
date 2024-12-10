@@ -33,6 +33,7 @@ library(janitor)
 library(ragg)
 library(here)
 library(svglite)
+library(broom)
 ```
 
 Loading and saving raw data set
@@ -269,7 +270,7 @@ linear_model <- lm(flipper_length_mm ~ sex, data = adelie_flipper_length_and_sex
 **Checking data meets assumptions of linear model analysis**
 
 Before conducting the linear model analysis we first verify that the
-data meets the assumptions of a linear model analysis. These are:
+data meets the assumptions of a linear model analysis. These are;
 independence of data points, normality, homoscedasticity, and absence of
 influential outliers. We can assume that the data collection and
 sampling methods used ensured independence of data points. To test for
@@ -278,16 +279,16 @@ examine the data.
 
 ```{r Diagnostic Plots}
 #Diagnostic plots 
-#Displaying diagnostic plots in a multi-panel grid and adjusting margin size 
+#Displaying diagnostic plots in a grid
 par(mfrow = c(2, 2), 
     mar = c(4, 4, 2, 2))  
 
 
-#Diagnostic plot function
+# Running diagnostic plot function
 Diagnostic_Plot_Function()
 
 
-# Saving the diagnostic plot as a .png
+# Saving diagnostic plots as a .png
 save_diagnostic_plot_as_png(
   here("figures", "Diagnostic_Plot.png"),  
   Diagnostic_Plot_Function,                    
@@ -296,7 +297,7 @@ save_diagnostic_plot_as_png(
   scaling = 2                              
 )
 
-# Saving the diagnostic plot as a .svg
+# Saving diagnostic plots as a .svg
 save_diagnostic_plot_as_svg(
   here("figures", "Diagnostic_Plot.svg"),  
   Diagnostic_Plot_Function,                    
@@ -307,11 +308,56 @@ save_diagnostic_plot_as_svg(
 
 ```
 
+The residuals versus fitted values and scale-location plot both show an
+approximately horizontal red line which suggests the data fits the
+assumption of homoscedasticity. The Q-Q residuals plot shows the points
+falling motly along the diagonal line with some deviation at the extreme
+ends which are not sufficient to violate the assumption of normality,
+therefore we may assume that the residuals are normally distributed.
+Finally, the residuals versus factor plot indicates no significant
+outliers, validating the assumption of absence of influential outliers.
+
 ### Results & Discussion
 
-```{r Plotting Results}
+**Summary of the linear model**
 
-# Make sure your code prints. 
+```{r Linear Model Summary}
+# Viewing a summary of the linear model analysis
+summary(linear_model)
+```
+
+**Results table**
+
+```{r Linear Model Results Table}
+
+linear_model_summary <- tidy(linear_model)
+
+# Creating the table and formatting for better visualisation
+female_row <- linear_model_summary %>%
+  filter(term == "(Intercept)") %>%
+  mutate(
+    term = "Female", 
+    estimate = estimate, 
+    std.error = std.error
+  ) %>%
+  select(term, estimate, std.error)
+
+male_row <- linear_model_summary %>%
+  filter(term == "sexMale") %>%
+  select(term, estimate, std.error, statistic, p.value) 
+
+summary_table <- bind_rows(female_row, male_row)
+
+summary_table <- summary_table %>%
+  mutate(
+    estimate = round(estimate, 3),
+    std.error = round(std.error, 3),
+    statistic = ifelse(is.na(statistic), NA, round(statistic, 3)),
+    p.value = ifelse(is.na(p.value), NA, format(p.value, scientific = TRUE, digits = 4)),
+    term = recode(term, "sexMale" = "Male", "sexFemale" = "Female")
+  )
+
+print(summary_table)
 
 ```
 
