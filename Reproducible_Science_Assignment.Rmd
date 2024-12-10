@@ -102,7 +102,7 @@ ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_
 
 ```
 
-### b) Explanation of poor design choices 
+### b) Explanation of poor design choices
 
 This graph plots the body mass against flipper length for three penguin
 species. However, the design choices in this graph are misleading and
@@ -150,11 +150,72 @@ includes the results of the stats test.*
 
 *Your text should include:*
 
--   *Introduction*
+#### Introduction
 
--   *Hypothesis*
+Sexual size dimorphism is a trait exhibited by many vertebrate species
+as a result of selective forces acting differently on males and females
+due to their differing reproductive and ecological roles. This trend has
+been found to be true in penguins, particularly in differing flipper
+lengths with males having larger flippers than females (Jennings et al.,
+2016). This study will investigate sexual size dimorphism in the Adelie
+species of penguin by testing whether males have larger flipper lengths
+than females using. a linear model analysis of the 'Palmer Penguins'
+data set. If there is no sexual size dimorphism in this species, we
+would expect that the null hypothesis that there is no significant
+difference in flipper length between males and females to be true . This
+would mean that the coefficient of the linear model analysis would not
+be statistically different from zero. If the coefficient of the linear
+model analysis *is* statistically different from zero, we can reject
+this null hypothesis and this would support the alternate hypothesis
+that sexual size dimorphism in flippers does occur in Adelie penguins.
 
--   *Stats Method*
+#### Stats Method
+
+Loading libraries
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(janitor)
+library(ragg)
+library(here)
+library(svglite)
+```
+
+Loading and saving raw data set
+
+```{r}
+penguins_raw 
+write_csv(penguins_raw, here("data", "penguins_raw.csv"))
+```
+
+Loading functions
+
+```{r}
+source(here("functions", "Functions_For_Penguins.R"))
+```
+
+Cleaning the raw data and saving as a new data file
+
+```{r}
+#clean data
+penguins_cleaned <- penguins_raw %>%
+  clean_column_names() %>%
+  remove_columns("comments") %>%
+  remove_columns("delta") %>%
+  remove_empty_columns_rows() %>%
+  shorten_species() %>%
+  shorten_sex ()
+
+#save and load clean data
+write_csv(penguins_cleaned, here("data", "penguins_clean.csv"))
+
+penguins_cleaned <- read_csv(here("data", "penguins_clean.csv"), show_col_types = FALSE)
+
+#visualise the cleaned data
+colnames(penguins_cleaned)
+penguins_cleaned
+```
 
 -   *Results*
 
