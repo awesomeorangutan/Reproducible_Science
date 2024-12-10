@@ -150,7 +150,7 @@ includes the results of the stats test.*
 
 *Your text should include:*
 
-#### Introduction
+### Introduction
 
 Sexual size dimorphism is a trait exhibited by many vertebrate species
 as a result of selective forces acting differently on males and females
@@ -169,9 +169,9 @@ model analysis *is* statistically different from zero, we can reject
 this null hypothesis and this would support the alternate hypothesis
 that sexual size dimorphism in flippers does occur in Adelie penguins.
 
-#### Stats Method
+### Statistical Method
 
-Loading libraries
+**Loading libraries**
 
 ```{r}
 library(tidyverse)
@@ -182,21 +182,21 @@ library(here)
 library(svglite)
 ```
 
-Loading and saving raw data set
+**Loading and saving raw data set**
 
 ```{r}
 penguins_raw 
 write_csv(penguins_raw, here("data", "penguins_raw.csv"))
 ```
 
-Loading functions
+**Loading functions**
 
 ```{r}
 source(here("functions", "Functions_For_Penguins.R"))
 source(here("functions", "Exploratory_Plotting.R"))
 ```
 
-Cleaning the raw data and saving as a new data file
+**Cleaning the raw data and saving as a new data files**
 
 ```{r}
 #clean data
@@ -216,10 +216,8 @@ penguins_cleaned <- read_csv(here("data", "penguins_clean.csv"), show_col_types 
 #visualise the cleaned data
 colnames(penguins_cleaned)
 penguins_cleaned
-```
 
-```{r}
-# Saving dataset of Adelie penguins, flipper length & sex columns and removing NA values 
+# Saving dataset of Adelie penguins, flipper length & sex
 adelie_flipper_length_and_sex <- penguins_cleaned %>%
   select(species, flipper_length_mm, sex) %>%
   filter(species == "Adelie") %>%
@@ -228,7 +226,8 @@ adelie_flipper_length_and_sex <- penguins_cleaned %>%
 write_csv(adelie_flipper_length_and_sex, here("data", "adelie_flipper_length_and_sex.csv"))
 ```
 
-Exploratory plot of raw data
+**Exploratory plot of raw data**
+
 ```{r}
 # using exploratory plotting function generate violin plot
 plot_flipper_violin(adelie_flipper_length_and_sex)
@@ -252,8 +251,15 @@ save_flipper_plot_svg(
 
 ```
 
+The violin plot above visualises the flipper length data for males and
+females of the Adelie penguin species. From the shape of these plots, we
+can see that the flipper length of males being on average larger than
+that of the females. The data for both males and females appears
+approximately normally distributed, with a slight positive skew for the
+male flipper length data as the lower end of the violin is wider than
+the top end.
 
--   *Results*
+*Results*
 
 -   *Discussion*
 
