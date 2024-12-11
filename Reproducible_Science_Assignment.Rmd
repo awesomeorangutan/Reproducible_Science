@@ -319,10 +319,10 @@ plot <- ggplot(model_predictions, aes(x = sex, y = flipper_length_mm)) +
   theme_minimal() + 
   theme(legend.position = "none") 
 
+plot
 ```
 
 **Saving Plots as .svg & .png files**
-
 ```{r Saving Plots}
 # Saving as PNG
 save_plot_as_png(plot, "figures/Linear_Model_Plot.png", size = 20, res = 300)
@@ -333,7 +333,7 @@ save_plot_as_svg(plot, "figures/Linear_Model_Plot.svg", size = 20)
 
 **Results table**
 
-```{r Linear Model Results Table}
+```{r Linear Model Results Table, echo=TRUE}
 
 linear_model_summary <- tidy(linear_model)
 
