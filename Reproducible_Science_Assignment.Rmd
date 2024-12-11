@@ -323,6 +323,7 @@ plot
 ```
 
 **Saving Plots as .svg & .png files**
+
 ```{r Saving Plots}
 # Saving as PNG
 save_plot_as_png(plot, "figures/Linear_Model_Plot.png", size = 20, res = 300)
@@ -335,9 +336,11 @@ save_plot_as_svg(plot, "figures/Linear_Model_Plot.svg", size = 20)
 
 ```{r Linear Model Results Table, echo=TRUE}
 
+# Creating a summary of the linear model 
 linear_model_summary <- tidy(linear_model)
 
-# Creating the table and formatting for better visualisation
+
+# Creating row for female (intercept) estimate & standard error
 female_row <- linear_model_summary %>%
   filter(term == "(Intercept)") %>%
   mutate(
@@ -347,10 +350,12 @@ female_row <- linear_model_summary %>%
   ) %>%
   select(term, estimate, std.error)
 
+# Creating row for male estimate, standard error, t statsitic and p value 
 male_row <- linear_model_summary %>%
   filter(term == "sexMale") %>%
   select(term, estimate, std.error, statistic, p.value) 
 
+# Forming the full table by combining rows and formatting for better visualisation
 summary_table <- bind_rows(female_row, male_row)
 
 summary_table <- summary_table %>%
@@ -362,9 +367,14 @@ summary_table <- summary_table %>%
     term = recode(term, "sexMale" = "Male", "sexFemale" = "Female")
   )
 
-print(summary_table)
+View(summary_table)
 
 ```
+
+| Term   | Estimate  | Standard Error | T Statistic | P Value  |
+|--------|-----------|----------------|-------------|----------|
+| Female | 187.795   | 0.716          | NA          | NA       |
+| Male   | 4.616     | 1.013          | 4.559       | 1.09e-05 |
 
 From these results, the positive estimate for male Adelie penguins of
 4.616 indicates that on average, males have a greater flipper length
@@ -393,26 +403,29 @@ sexual dimorphism in Adelie penguins or compare this difference in
 flipper length in other penguin species to determine whether they also
 follow this trend.
 
+### References
+
+-   Jennings, S., Varsani, A., Dugger, K.M., Ballard, G. and Ainley,
+    D.G. (2016). Sex-Based Differences in Adélie Penguin (Pygoscelis
+    adeliae) Chick Growth Rates and Diet. *PLOS ONE*, 11(3), p.e0149090.
+    doi:<https://doi.org/10.1371/journal.pone.0149090.>
+
+-   Whitlock, M. and Schluter, D. (2009). *The Analysis of Biological
+    Data*. Roberts Publishers.
+
 ------------------------------------------------------------------------
 
 ## QUESTION 3: Open Science
 
 ### a) GitHub
 
-*Upload your RProject you created for **Question 2** and any files and
-subfolders used to GitHub. Do not include any identifiers such as your
-name. Make sure your GitHub repo is public.*
-
 *GitHub link:*
-
-*You will be marked on your repo organisation and readability.*
+<https://github.com/awesomeorangutan/Reproducible_Science>
 
 ### b) Share your repo with a partner, download, and try to run their data pipeline.
 
-*Partner's GitHub link:*
-
-*You **must** provide this so I can verify there is no plagiarism
-between you and your partner.*
+*Partner's GitHub
+link:*<https://github.com/The-Nedstar/ReproducableFigures>
 
 ### c) Reflect on your experience running their code. (300-500 words)
 
