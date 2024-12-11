@@ -98,7 +98,7 @@ ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_
   theme_minimal() +
   theme(axis.text = element_text(size = 3, angle = 90, color = "black"),
         legend.position = "top") +  
-  scale_color_manual(values = c("hotpink", "yellow", "limegreen")) +  
+  scale_color_manual(values = c("pink", "yellow", "green")) +  
   coord_cartesian(xlim = c(150, 250), ylim = c(1000, 7000))
 
 ```
