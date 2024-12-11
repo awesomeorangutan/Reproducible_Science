@@ -1,0 +1,434 @@
+---
+title: "Reproducible Science & Figures Assignment"
+output:
+  html_document: default
+  pdf_document: default
+date: "2024-12-09"
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+*The following is a template .rmd RMarkdown file for you to use for your
+homework submission.*
+
+*Please Knit your .rmd to a PDF format or HTML and submit that with no
+identifiers like your name.*
+
+*To create a PDF, first install tinytex and load the package. Then press
+the Knit arrow and select "Knit to PDF".*
+
+## QUESTION 01: Data Visualisation for Science Communication
+
+**Loading libraries**
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(janitor)
+library(ragg)
+library(here)
+library(svglite)
+library(broom)
+```
+
+**Loading and saving raw data set**
+
+```{r}
+penguins_raw 
+write_csv(penguins_raw, here("data", "penguins_raw.csv"))
+```
+
+**Loading functions**
+
+```{r}
+source(here("functions", "Functions_For_Penguins.R"))
+```
+
+**Cleaning the raw data and saving as a new data file**
+
+```{r}
+#clean data
+penguins_cleaned <- penguins_raw %>%
+  clean_column_names() %>%
+  remove_columns("comments") %>%
+  remove_columns("delta") %>%
+  remove_empty_columns_rows() %>%
+  shorten_species() %>%
+  shorten_sex ()
+
+#save and load clean data
+write_csv(penguins_cleaned, here("data", "penguins_clean.csv"))
+
+penguins_cleaned <- read_csv(here("data", "penguins_clean.csv"), show_col_types = FALSE)
+
+#visualise the cleaned data
+colnames(penguins_cleaned)
+penguins_cleaned
+```
+
+**Creating a figure using the Palmer Penguin data set that is correct
+but badly communicates the data**
+
+```{r bad figure code, echo=FALSE}
+# Saving dataset of species, flipper length & body mass columns and removing NA values 
+species_flipper_length_and_bodymass <- penguins_cleaned %>% select(species, flipper_length_mm, body_mass_g) %>%
+  drop_na()
+
+# Visualising modified data set 
+species_flipper_length_and_bodymass
+
+# Saving modified data set to use in scatterplot
+write_csv(penguins_cleaned, here("data", "species_flipper_length_and_bodymass.csv"))
+```
+
+#### a) Figure:
+
+```{r echo=FALSE}
+# Creating scatterplot
+ggplot(species_flipper_length_and_bodymass, aes(x = flipper_length_mm, y = body_mass_g, color = species)) +
+  geom_point(size = 10, alpha = 0.1) +  # Overly large points with excessive transparency
+  labs(title = "Flipper Length vs Body Mass", 
+       x = "Flipper Length (mm)", 
+       y = "Body Mass (g)") +
+  theme_minimal() +
+  theme(axis.text = element_text(size = 3, angle = 90, color = "black"),
+        legend.position = "top") +  
+  scale_color_manual(values = c("hotpink", "yellow", "limegreen")) +  
+  coord_cartesian(xlim = c(150, 250), ylim = c(1000, 7000))
+
+```
+
+#### b) Explanation of poor design choices
+
+This graph plots the body mass against flipper length for three penguin
+species. However, the design choices in this graph are misleading and
+poorly communicate the data. One reason for this is that the patterns in
+the data are are difficult to see due to the overly large points with
+excessive transparency that blend with one another, and are hard to see
+over clashing colours. For example pink and yellow points overlap so we
+cannot fully view the data for these two species. Additionally, the view
+of the data is restricted by the axis as these do not start at 0, so any
+potential outliers are not seen making the graph misleading. Finally,
+the graphical elements of this graph are unclear as the text on the axis
+is too small to read easily without zooming in, and the labels on the x
+axis are oriented at a 90 degree angle making it awkward to read
+(Whitlock and Schluter, 2019).
+
+------------------------------------------------------------------------
+
+## QUESTION 2: Data Pipeline
+
+### Introduction
+
+Sexual size dimorphism is a trait exhibited by many vertebrate species
+as a result of selective forces acting differently on males and females
+due to their differing reproductive and ecological roles. This trend has
+been found to be true in penguins, particularly in differing flipper
+lengths with males having larger flippers than females (Jennings et al.,
+2016). This study will investigate sexual size dimorphism in the Adelie
+species of penguin by testing whether males have larger flipper lengths
+than females using. a linear model analysis of the 'Palmer Penguins'
+data set. If there is no sexual size dimorphism in this species, we
+would expect that the null hypothesis that there is no significant
+difference in flipper length between males and females to be true . This
+would mean that the coefficient of the linear model analysis would not
+be statistically different from zero. If the coefficient of the linear
+model analysis *is* statistically different from zero, we can reject
+this null hypothesis and this would support the alternate hypothesis
+that sexual size dimorphism in flippers does occur in Adelie penguins.
+
+### Statistical Method
+
+**Loading libraries**
+
+```{r}
+library(tidyverse)
+library(palmerpenguins)
+library(janitor)
+library(ragg)
+library(here)
+library(svglite)
+```
+
+**Loading and saving raw data set**
+
+```{r}
+penguins_raw 
+write_csv(penguins_raw, here("data", "penguins_raw.csv"))
+```
+
+**Loading functions**
+
+```{r}
+source(here("functions", "Functions_For_Penguins.R"))
+source(here("functions", "Exploratory_Plotting.R"))
+source(here("functions", "Diagnostic_Plot_Function.R"))
+source(here("functions", "SaveAs_svg_png_Functions.R"))
+```
+
+**Cleaning the raw data and saving as a new data files**
+
+```{r}
+#clean data
+penguins_cleaned <- penguins_raw %>%
+  clean_column_names() %>%
+  remove_columns("comments") %>%
+  remove_columns("delta") %>%
+  remove_empty_columns_rows() %>%
+  shorten_species() %>%
+  shorten_sex ()
+
+#save and load clean data
+write_csv(penguins_cleaned, here("data", "penguins_clean.csv"))
+
+penguins_cleaned <- read_csv(here("data", "penguins_clean.csv"), show_col_types = FALSE)
+
+#visualise the cleaned data
+colnames(penguins_cleaned)
+penguins_cleaned
+
+# Saving dataset of Adelie penguins, flipper length & sex
+adelie_flipper_length_and_sex <- penguins_cleaned %>%
+  select(species, flipper_length_mm, sex) %>%
+  filter(species == "Adelie") %>%
+  drop_na()
+
+write_csv(adelie_flipper_length_and_sex, here("data", "adelie_flipper_length_and_sex.csv"))
+```
+
+**Exploratory plot of raw data**
+
+```{r Data Exploration}
+# using exploratory plotting function generate violin plot
+plot_flipper_violin(adelie_flipper_length_and_sex)
+
+# Saving the plot as a PNG file in figures folder
+save_flipper_violin_png(
+  penguins_flippers = adelie_flipper_length_and_sex, 
+  filename = "Figures/adelie_flipper_violin_plot.png", 
+  size = 15,
+  res = 300,
+  scaling = 1
+)
+
+# Saving the plot as an SVG file in figures folder
+save_flipper_plot_svg(
+  penguins_flippers = adelie_flipper_length_and_sex,
+  filename = "Figures/adelie_flipper_violin_plot.svg", 
+  size = 15,
+  scaling = 1
+)
+
+```
+
+The violin plot above visualises the flipper length data for males and
+females of the Adelie penguin species. From the shape of these plots, we
+can see that the flipper length of males being on average larger than
+that of the females. The data for both males and females appears
+approximately normally distributed, with a slight positive skew for the
+male flipper length data as the lower end of the violin is wider than
+the top end.
+
+**Defining the linear model**
+
+```{r}
+linear_model <- lm(flipper_length_mm ~ sex, data = adelie_flipper_length_and_sex)
+```
+
+**Checking data meets assumptions of linear model analysis**
+
+Before conducting the linear model analysis we first verify that the
+data meets the assumptions of a linear model analysis. These are;
+independence of data points, normality, homoscedasticity, and absence of
+influential outliers. We can assume that the data collection and
+sampling methods used ensured independence of data points. To test for
+compliance with the remaining assumptions, diagnostic plots are used to
+examine the data.
+
+```{r Diagnostic Plots}
+#Diagnostic plots 
+#Displaying diagnostic plots in a grid
+par(mfrow = c(2, 2), 
+    mar = c(4, 4, 2, 2))  
+
+
+# Running diagnostic plot function
+Diagnostic_Plot_Function()
+
+
+# Saving diagnostic plots as a .png
+save_diagnostic_plot_as_png(
+  here("figures", "Diagnostic_Plot.png"),  
+  Diagnostic_Plot_Function,                    
+  size = 20,                               
+  res = 300,                              
+  scaling = 2                              
+)
+
+# Saving diagnostic plots as a .svg
+save_diagnostic_plot_as_svg(
+  here("figures", "Diagnostic_Plot.svg"),  
+  Diagnostic_Plot_Function,                    
+  size = 20,                               
+  scaling = 2                              
+)
+
+```
+
+The residuals versus fitted values and scale-location plot both show an
+approximately horizontal red line which suggests the data fits the
+assumption of homoscedasticity. The Q-Q residuals plot shows the points
+falling mostly along the diagonal line with some deviation at the
+extreme ends which are not sufficient to violate the assumption of
+normality, therefore we may assume that the residuals are normally
+distributed. Finally, the residuals versus factor plot indicates no
+significant outliers, validating the assumption of absence of
+influential outliers.
+
+### Results & Discussion
+
+**Summary of the linear model**
+
+```{r Linear Model Summary}
+# Viewing a summary of the linear model analysis
+summary(linear_model)
+```
+
+**Plotted linear model**
+
+```{r Plot of Linear model}
+# Creating dataframe with the model confidence intervals 
+model_predictions <- adelie_flipper_length_and_sex %>%
+  mutate(
+    predicted = predict(linear_model, newdata = adelie_flipper_length_and_sex),
+    conf_low = predict(linear_model, newdata = adelie_flipper_length_and_sex, interval = "confidence")[,2],
+    conf_high = predict(linear_model, newdata = adelie_flipper_length_and_sex, interval = "confidence")[,3]
+  )
+
+# Plotting the model
+plot <- ggplot(model_predictions, aes(x = sex, y = flipper_length_mm)) + 
+  geom_point(aes(color = sex), size = 2, alpha = 0.6) + 
+  geom_errorbar(aes(ymin = conf_low, ymax = conf_high), width = 0.2) + 
+  stat_summary(aes(x = sex, y = flipper_length_mm), fun = mean, geom = "point", color = "black", size = 2) + 
+  labs(title = "Linear Model: Flipper Lengths in Male and Female Adelie Penguins", x = "Sex", y = "Flipper Length (mm)") +
+  theme_minimal() + 
+  theme(legend.position = "none") 
+
+plot
+```
+
+**Saving Plots as .svg & .png files**
+```{r Saving Plots}
+# Saving as PNG
+save_plot_as_png(plot, "figures/Linear_Model_Plot.png", size = 20, res = 300)
+
+# Saving as SVG
+save_plot_as_svg(plot, "figures/Linear_Model_Plot.svg", size = 20)
+```
+
+**Results table**
+
+```{r Linear Model Results Table, echo=TRUE}
+
+linear_model_summary <- tidy(linear_model)
+
+# Creating the table and formatting for better visualisation
+female_row <- linear_model_summary %>%
+  filter(term == "(Intercept)") %>%
+  mutate(
+    term = "Female", 
+    estimate = estimate, 
+    std.error = std.error
+  ) %>%
+  select(term, estimate, std.error)
+
+male_row <- linear_model_summary %>%
+  filter(term == "sexMale") %>%
+  select(term, estimate, std.error, statistic, p.value) 
+
+summary_table <- bind_rows(female_row, male_row)
+
+summary_table <- summary_table %>%
+  mutate(
+    estimate = round(estimate, 3),
+    std.error = round(std.error, 3),
+    statistic = ifelse(is.na(statistic), NA, round(statistic, 3)),
+    p.value = ifelse(is.na(p.value), NA, format(p.value, scientific = TRUE, digits = 4)),
+    term = recode(term, "sexMale" = "Male", "sexFemale" = "Female")
+  )
+
+print(summary_table)
+
+```
+
+From these results, the positive estimate for male Adelie penguins of
+4.616 indicates that on average, males have a greater flipper length
+than females by 4.616mm. Additionally, the standard errors are small
+which indicates that the estimates are precise and the model is robust.
+The P value of 1.09x10⁻⁵ is less than the accepted significance level
+0.05, suggesting this difference in flipper length is statistically
+significant and unlikely to have arisen by chance. Therefore, we have
+sufficient evidence to reject the null hypothesis which stated no
+difference in flipper length between males and females.
+
+### Conclusion
+
+The linear model analysis was conducted to look at the difference in
+flipper length between male and female Adelie penguins on the basis that
+this data appeared to meet the assumptions of a linear model. The
+results of this model indicated a statistically significant relationship
+at the 0.05 significance level (p-value of 1.09 × 10⁻⁵) with male
+penguins on average having a greater flipper length than females. This
+provides strong evidence for rejecting the null hypothesis that there is
+no difference in flipper length between sexes. This difference in
+flipper length may be influential in understanding the ecology or
+evolution of sexual dimorphism in this species of penguin. Future
+studies may endeavour to investigate other characteristic traits of
+sexual dimorphism in Adelie penguins or compare this difference in
+flipper length in other penguin species to determine whether they also
+follow this trend.
+
+------------------------------------------------------------------------
+
+## QUESTION 3: Open Science
+
+### a) GitHub
+
+*Upload your RProject you created for **Question 2** and any files and
+subfolders used to GitHub. Do not include any identifiers such as your
+name. Make sure your GitHub repo is public.*
+
+*GitHub link:*
+
+*You will be marked on your repo organisation and readability.*
+
+### b) Share your repo with a partner, download, and try to run their data pipeline.
+
+*Partner's GitHub link:*
+
+*You **must** provide this so I can verify there is no plagiarism
+between you and your partner.*
+
+### c) Reflect on your experience running their code. (300-500 words)
+
+-   *What elements of your partner's code helped you to understand their
+    data pipeline?*
+
+-   *Did it run? Did you need to fix anything?*
+
+-   *What suggestions would you make for improving their code to make it
+    more understandable or reproducible, and why?*
+
+-   *If you needed to alter your partner's figure using their code, do
+    you think that would be easy or difficult, and why?*
+
+### d) Reflect on your own code based on your experience with your partner's code and their review of yours. (300-500 words)
+
+-   *What improvements did they suggest, and do you agree?*
+
+-   *What did you learn about writing code for other people?*
