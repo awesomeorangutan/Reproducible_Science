@@ -13,15 +13,6 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*The following is a template .rmd RMarkdown file for you to use for your
-homework submission.*
-
-*Please Knit your .rmd to a PDF format or HTML and submit that with no
-identifiers like your name.*
-
-*To create a PDF, first install tinytex and load the package. Then press
-the Knit arrow and select "Knit to PDF".*
-
 ## QUESTION 01: Data Visualisation for Science Communication
 
 **Loading libraries**
@@ -419,8 +410,8 @@ follow this trend.
 *GitHub link:*
 <https://github.com/awesomeorangutan/Reproducible_Science>
 
-*Partner's GitHub
-link:*<https://github.com/The-Nedstar/ReproducableFigures>
+*Partner's GitHub link:*
+<https://github.com/The-Nedstar/ReproducableFigures>
 
 ### Reflection on your experience running partner's code 
 
