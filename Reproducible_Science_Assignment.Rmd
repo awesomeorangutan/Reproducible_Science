@@ -339,7 +339,6 @@ save_plot_as_svg(plot, "figures/Linear_Model_Plot.svg", size = 20)
 # Creating a summary of the linear model 
 linear_model_summary <- tidy(linear_model)
 
-
 # Creating row for female (intercept) estimate & standard error
 female_row <- linear_model_summary %>%
   filter(term == "(Intercept)") %>%
@@ -443,5 +442,11 @@ link:*<https://github.com/The-Nedstar/ReproducableFigures>
 ### d) Reflect on your own code based on your experience with your partner's code and their review of yours. (300-500 words)
 
 -   *What improvements did they suggest, and do you agree?*
+
+    My partner made the following suggestions for my code:
+
+    1) Make more use of functions, for example in creating the results
+    table a function could have been used to form the male and female
+    rows. I agree with this
 
 -   *What did you learn about writing code for other people?*
