@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 **Loading libraries**
 
 ```{r warning=FALSE, message=FALSE}
+renv::restore()
 library(tidyverse)
 library(palmerpenguins)
 library(janitor)
@@ -137,7 +138,8 @@ that sexual size dimorphism in flippers does occur in Adelie penguins.
 
 **Loading libraries**
 
-```{r}
+```{r warning=FALSE, message=FALSE}
+renv::restore
 library(tidyverse)
 library(palmerpenguins)
 library(janitor)
