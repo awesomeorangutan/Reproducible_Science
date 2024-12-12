@@ -1,8 +1,8 @@
 ---
 title: "Reproducible Science & Figures Assignment"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 date: "2024-12-09"
 editor_options: 
   markdown: 
@@ -26,6 +26,7 @@ library(ragg)
 library(here)
 library(svglite)
 library(broom)
+library(tinytex)
 ```
 
 **Loading and saving raw data set**
@@ -146,6 +147,7 @@ library(janitor)
 library(ragg)
 library(here)
 library(svglite)
+library(tinytex)
 ```
 
 **Loading and saving raw data set**
