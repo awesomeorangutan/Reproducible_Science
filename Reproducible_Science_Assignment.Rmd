@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 **Loading libraries**
 
 ```{r warning=FALSE, message=FALSE}
+renv::restore()
 library(tidyverse)
 library(palmerpenguins)
 library(janitor)
@@ -137,13 +138,15 @@ that sexual size dimorphism in flippers does occur in Adelie penguins.
 
 **Loading libraries**
 
-```{r}
+```{r warning=FALSE, message=FALSE}
+renv::restore
 library(tidyverse)
 library(palmerpenguins)
 library(janitor)
 library(ragg)
 library(here)
 library(svglite)
+library(broom)
 ```
 
 **Loading and saving raw data set**
@@ -326,7 +329,6 @@ save_plot_as_svg(plot, "figures/Linear_Model_Plot.svg", size = 20)
 **Results table**
 
 ```{r Linear Model Results Table, echo=TRUE}
-
 # Creating a summary of the linear model 
 linear_model_summary <- tidy(linear_model)
 
@@ -357,14 +359,12 @@ summary_table <- summary_table %>%
     term = recode(term, "sexMale" = "Male", "sexFemale" = "Female")
   )
 
-View(summary_table)
-
 ```
 
-| Term   | Estimate  | Standard Error | T Statistic | P Value  |
-|--------|-----------|----------------|-------------|----------|
-| Female | 187.795   | 0.716          | NA          | NA       |
-| Male   | 4.616     | 1.013          | 4.559       | 1.09e-05 |
+| Term   | Estimate | Standard Error | T Statistic | P Value  |
+|--------|----------|----------------|-------------|----------|
+| Female | 187.795  | 0.716          | NA          | NA       |
+| Male   | 4.616    | 1.013          | 4.559       | 1.09e-05 |
 
 From these results, the positive estimate for male Adelie penguins of
 4.616 indicates that on average, males have a greater flipper length
@@ -388,7 +388,7 @@ provides strong evidence for rejecting the null hypothesis that there is
 no difference in flipper length between sexes. This difference in
 flipper length may be influential in understanding the ecology or
 evolution of sexual dimorphism in this species of penguin. Future
-studies may endeavour to investigate other characteristic traits of
+studies may endeavor to investigate other characteristic traits of
 sexual dimorphism in Adelie penguins or compare this difference in
 flipper length in other penguin species to determine whether they also
 follow this trend.
@@ -413,7 +413,7 @@ follow this trend.
 *Partner's GitHub link:*
 <https://github.com/The-Nedstar/ReproducableFigures>
 
-### Reflection on your experience running partner's code 
+### Reflection on your experience running partner's code
 
 Most of the code ran smoothly when running my partner's code, although
 there were a couple of issues that needed amending. The first issue I
@@ -430,19 +430,19 @@ made it easy to follow and understand and the code all ran without any
 issues. One change I would make is in improving the clarity of some
 variable names such as 'penguins_MVF'. Upon first inspection of this it
 wasn't completely clear what this data set was, so a more detailed name
-such as \'Penguin_Mass_vs_Flippers\' could be an improvement to make
-this easier to follow. The use of the graph-making function found in
-\'penguins.R\' within the functions file was very efficient as it
-created both the exploratory scatterplot graph and linear model graph
-within one function through use of \'if\' commands. This and created
-very clear graphs and it was easy to make small adjustments such as
-changing the titles and labels on the graphs. This did have limitations
-though, as deeper and more complex changes to the graphs were very
-difficult to accomplish. One change I would like to have made is
-cropping the x axis to remove blank space (as had been done for the y
-axis) allowing the data points to fill a greater area of the graph,
-rather than being clustered on the right-hand side. This amendment
-involved altering the graph-making function, which was very difficult to
+such as 'Penguin_Mass_vs_Flippers' could be an improvement to make this
+easier to follow. The use of the graph-making function found in
+'penguins.R' within the functions file was very efficient as it created
+both the exploratory scatterplot graph and linear model graph within one
+function through use of 'if' commands. This and created very clear
+graphs and it was easy to make small adjustments such as changing the
+titles and labels on the graphs. This did have limitations though, as
+deeper and more complex changes to the graphs were very difficult to
+accomplish. One change I would like to have made is cropping the x axis
+to remove blank space (as had been done for the y axis) allowing the
+data points to fill a greater area of the graph, rather than being
+clustered on the right-hand side. This amendment involved altering the
+graph-making function, which was very difficult to
 accomplish. Therefore, it may be better to have made two separate and
 more simple functions for making the scatterplot and linear model plot
 to improve the ease of manipulating graph aspects without breaking the
@@ -452,20 +452,21 @@ code. 
 
 My partner made the following suggestions for my code:  
 
-1) Make more use of functions, for example, a function could have been
-used to form the male and female rows in creating the results table.  
+1)  Make more use of functions, for example, a function could have been
+    used to form the male and female rows in creating the results table.
+     
 
 I agree with this suggestion and this is something I would change in the
 future, not only for creating the results table, but also potentially
 making a function for plotting the linear model as this would allow it
 to be used for analysing other variables in the dataset.  
 
-2) Fix the issue of reproducibility in my exploratory violin plot
-function. My function in \'Exploratory_Plotting.R\' made a violin plot
-specifically for making violin plot of the flipper data for male and
-female Adelie penguins. In this function, the variable are already
-defined so it couldn\'t be used for other variables in the Palmer
-penguins data set as you would have to alter the function.  
+2)  Fix the issue of reproducibility in my exploratory violin plot
+    function. My function in 'Exploratory_Plotting.R' made a violin plot
+    specifically for making violin plot of the flipper data for male and
+    female Adelie penguins. In this function, the variable are already
+    defined so it couldn't be used for other variables in the Palmer
+    penguins data set as you would have to alter the function.  
 
 I agree with this point, as it raises a potential issue with
 reproducibility if one wanted to use the function for visualising raw
@@ -473,18 +474,18 @@ data of other variables. It would have been better to make a more
 generalised function that could be used in other contexts. This is
 something I would change in the future.  
 
-3) Variable names are too long and complicated. My partner highlighted
-that some of the names of my variables are quite long, which makes the
-code look over crowded and slightly messy.  
+3)  Variable names are too long and complicated. My partner highlighted
+    that some of the names of my variables are quite long, which makes
+    the code look over crowded and slightly messy.  
 
 I agree with this to an extent, for example
-\'adelie_flipper_length_and_sex\' is quite long. However, I believe this
+'adelie_flipper_length_and_sex' is quite long. However, I believe this
 to be an issue of personal preference. While I find that this helps my
 code to be more easily understood, to others it may be slightly
 convoluted. In future, I might think more about making my variable names
 both concise and clear. An improved version I could have used
-is \'adelie_flipper_and_sex\' as the only data collected on flippers is
-their length, so including \'length\' in the variable name may be
+is 'adelie_flipper_and_sex' as the only data collected on flippers is
+their length, so including 'length' in the variable name may be
 unnecessary detailing.
 
 Overall, through running my partner's code and my partner running my
