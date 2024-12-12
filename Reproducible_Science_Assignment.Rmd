@@ -390,7 +390,7 @@ provides strong evidence for rejecting the null hypothesis that there is
 no difference in flipper length between sexes. This difference in
 flipper length may be influential in understanding the ecology or
 evolution of sexual dimorphism in this species of penguin. Future
-studies may endeavour to investigate other characteristic traits of
+studies may endeavor to investigate other characteristic traits of
 sexual dimorphism in Adelie penguins or compare this difference in
 flipper length in other penguin species to determine whether they also
 follow this trend.
